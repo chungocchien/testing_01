@@ -13,7 +13,7 @@ class TicketTest {
 
     @Test
     public void testCase1() throws InterruptedException {
-        System.setIn(new ByteArrayInputStream("-1\n".getBytes()));
+        System.setIn(new ByteArrayInputStream("-1\nman\n".getBytes()));
 
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         PrintStream ps = new PrintStream(byteArrayOutputStream);
@@ -29,7 +29,7 @@ class TicketTest {
 
     @Test
     public void testCase2() throws InterruptedException {
-        System.setIn(new ByteArrayInputStream("5\n".getBytes()));
+        System.setIn(new ByteArrayInputStream("5\nman\n".getBytes()));
 
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         PrintStream ps = new PrintStream(byteArrayOutputStream);
@@ -127,6 +127,21 @@ class TicketTest {
     public void testCase8() throws Exception {
         Throwable ilArException = assertThrows(IllegalArgumentException.class, () -> {
             System.setIn(new ByteArrayInputStream("10\nmans\n".getBytes()));
+
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            PrintStream ps = new PrintStream(byteArrayOutputStream);
+            System.setOut(ps);
+
+            Ticket.main(new String[0]);
+            System.setIn(stdin);
+        });
+
+        Assertions.assertEquals("unknown type \"mans\"", ilArException.getMessage());
+    }
+    @Test
+    public void testCase9() throws Exception {
+        Throwable ilArException = assertThrows(IllegalArgumentException.class, () -> {
+            System.setIn(new ByteArrayInputStream("65\nmans\n".getBytes()));
 
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             PrintStream ps = new PrintStream(byteArrayOutputStream);
